@@ -2,46 +2,56 @@ package dataStructures;
 
 /**
  * Saves a report and converts it to HTML to fit on a table for emailing the specific report
- * 
- * States
- * ====================
- * Starting: turning on
- * Running: running
- * Stopped: program closed gracefully
- * Failed: program crashed from last run
- * 
+ *  
  * @author Ben Shabowski
  *
  */
 public class Report {
 	
-	String title;
-	String status;
-	String statusColor;
-	String runTime;
-	String logName;
+	private String title;
+	private State state;
+	private String runTime;
+	private String logName;
 	
-	public Report(String title, String status, String runTime, String logName) {
+	/**
+	 * Constructor to build a report
+	 * @param title Process Name
+	 * @param state Current state of the process at the time of report generation
+	 * @param runTime Current time the process has been running for
+	 * @param logName File name of log
+	 */
+	public Report(String title, State state, String runTime, String logName) {
 		this.title = title;
-		this.status = status;
+		this.state = state;
 		this.runTime = runTime;
 		this.logName = logName;
-		if(status.equals("Running")) {
-			statusColor = "#008000";
-		}else if(status.equals("Failed")) {
-			statusColor = "#ff0000";
-		}else {
-			statusColor = "#000000";
-		}
 	}
 	
+	/**
+	 * Converts a report into HTML to be put into a table
+	 * @return HTML COde of the report to be put into a table
+	 */
 	public String toHTML() {
 		String htmlString = "";
+		String statusColor;
+		
+		switch (state) {
+		case Running:
+			statusColor = "#008000"; //green
+			break;
+		case Failed:
+			statusColor = "#008000"; //red
+			break;
+		default:
+			statusColor = "#000000"; //black
+			break;
+		}
+		
 		
 		htmlString = 
 				  "<tr>"
                 + "<td style=\"width:232px;\">" + title + "</td>"
-                + "<td style=\"width:133px;\"><span style=\"color: " + statusColor + ";\">" + status + "</span></td>"
+                + "<td style=\"width:133px;\"><span style=\"color: " + statusColor + ";\">" + state + "</span></td>"
                 + "<td style=\"width:184px;\">" + runTime + "</td>"
                 + "<td style=\"width:310px;\"><a href=\"zgamelogic.com/logs/" + logName + "\">link to log</a></td>"
                 + "</tr>";

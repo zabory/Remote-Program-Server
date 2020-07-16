@@ -13,7 +13,7 @@ import javax.mail.internet.MimeMessage;
 
 import dataStructures.Report;
 /**
- * Class to handle emailing results 
+ * Class to handle emailing statuses, as well as send crash texts 
  * @author Ben Shabowski
  *
  */
@@ -39,14 +39,13 @@ public class ReportingManager {
 		reports.addAll(r);
 	}
 	
+	/**
+	 * Sends a report out to the email addresses in the config file. 
+	 */
 	public void sendReport() {
-		//TODO change to config 
-		String to;
-		if(manager != null) {
-			to = manager.getServerConfigManager().getName();
-		}else {
-			to = "benshabowski@gmail.com,orangeleafbush@gmail.com";
-		}
+		//gets the to addresses from config
+		String[] to = manager.getServerConfigManager().getReportingEmails();
+		
 		final String from = "ZgameProgramReporter@gmail.com";
 		
 		String host = "smtp.gmail.com";
@@ -69,13 +68,14 @@ public class ReportingManager {
         	
         	message.setFrom(new InternetAddress(from));
         	
-        	for(String current : to.split(",")) {
+        	for(String current : to) {
         		message.addRecipient(Message.RecipientType.TO, new InternetAddress(current));
         	}
         	
-        	// Set Subject: header field
+        	//TODO Put date into header
             message.setSubject("Report for <plz put date here at some point>");
             
+            //TODO Put date into body
             String content = "<p><strong>This report is for &lt;date&gt; at a time</strong></p>"
                     + "<table style=\"width: 507px; height:79px,\">"
                     + "<tbody>"
@@ -85,6 +85,7 @@ public class ReportingManager {
                     + "<td style=\"width:184px;\">Runtime</td>"
                     + "<td style=\"width:310px;\">Log</td>"
                     + "</tr>";
+            //Add reports
             for(Report r : reports) {
             	content = content + r.toHTML();
             }

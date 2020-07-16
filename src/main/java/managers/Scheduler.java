@@ -1,13 +1,13 @@
 package managers;
 
 /**
- * Class to handle scheduling, loading the schedule from file
+ * Class to handle scheduling
  * @author Ben Shabowski
  *
  */
 public class Scheduler {
 
-	ReportingManager reportingManager;
+	private ReportingManager reportingManager;
 	private Manager manager;
 	
 	public Scheduler(Manager m) {

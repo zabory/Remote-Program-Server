@@ -9,22 +9,25 @@ import app.RemoteProgramServerUI;
 import javafx.application.Application;
 import managers.config.ServerConfigManager;
 
-@SuppressWarnings("restriction")
 public class Manager {
 
-	static RemoteProgramServerUI remoteProgramServerUI;
-	static ServerConfigManager serverConfigManager;
-	static FileManager fileManager;
-	static Scheduler scheduler;
-	static CommandManager commandManager;
+	private static RemoteProgramServerUI remoteProgramServerUI;
+	private static ServerConfigManager serverConfigManager;
+	private static ProgramManager fileManager;
+	private static Scheduler scheduler;
+	private static CommandManager commandManager;
 
+	/**
+	 * Main manager to hold, and start all the other managers.
+	 * A manager is meant to run independently without intervention from other managers
+	 * @param args
+	 */
 	public Manager(String[] args) {
-
+		//Converting array of args into a list for ez pickings
 		List<String> arguments = Arrays.asList(args);
 		
 		// Config manager
 		System.out.println("Starting config manager...");
-		
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.scan("managers.config");
 		context.refresh();
@@ -32,7 +35,7 @@ public class Manager {
 		
 		// File manager
 		System.out.println("Starting file manager...");
-		fileManager = new FileManager(this);
+		fileManager = new ProgramManager(this);
 
 		// Program scheduler
 		System.out.println("Starting scheduler...");
@@ -62,7 +65,7 @@ public class Manager {
 		return serverConfigManager;
 	}
 
-	public FileManager getFileManager() {
+	public ProgramManager getFileManager() {
 		return fileManager;
 	}
 

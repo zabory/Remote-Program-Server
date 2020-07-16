@@ -3,7 +3,7 @@ package dataStructures;
 import java.net.Socket;
 
 /**
- * Class to handle client connections
+ * Class to hold client connection to server. Clients connect with their own GUI on remote systems.
  * @author Ben Shabowski
  *
  */

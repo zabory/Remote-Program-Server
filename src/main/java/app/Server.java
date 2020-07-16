@@ -8,14 +8,14 @@ import dataStructures.Client;
 import managers.Manager;
 
 /**
- * The handler of handlers. Also handles incoming connections of clients
+ * Handles incoming connections of clients
  * @author Ben Shabowski
  *
  */
 public class Server {
 	
 	private ArrayList<Client> clients;
-	Manager manager;
+	private Manager manager;
 	
 	public Server(Manager m) {
 		manager = m;
