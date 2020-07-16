@@ -28,10 +28,7 @@ public class Manager {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.scan("managers.config");
 		context.refresh();
-		serverConfigManager = context.getBean(ServerConfigManager.class);
 		context.close();
-		
-		System.out.println(serverConfigManager.getReportingPhoneNumber());
 		
 		// File manager
 		System.out.println("Starting file manager...");

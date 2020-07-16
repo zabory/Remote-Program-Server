@@ -16,14 +16,10 @@ public class ServerConfigManager {
 	private String[] reportingEmailAddresses;
 	
 	@Value("${reporting.numbers}")
-	private String reportingPhoneNumber;
+	private String[] reportingPhoneNumber;
 	
 	@Value("${port:60533}")
 	private int port;
-	
-	public ServerConfigManager() {
-		
-	}
 
 	public String getName() {
 		return name;
@@ -33,8 +29,12 @@ public class ServerConfigManager {
 		return port;
 	}
 	
-	public String getReportingPhoneNumber() {
+	public String[] getReportingPhoneNumber() {
 		return reportingPhoneNumber;
+	}
+	
+	public String[] getReportingEmails() {
+		return reportingEmailAddresses;
 	}
 
 }

@@ -47,7 +47,7 @@ public class ReportingManager {
 		}else {
 			to = "benshabowski@gmail.com,orangeleafbush@gmail.com";
 		}
-		String from = "ZgameProgramReporter@gmail.com";
+		final String from = "ZgameProgramReporter@gmail.com";
 		
 		String host = "smtp.gmail.com";
 		
