@@ -7,11 +7,9 @@ package managers;
  */
 public class Scheduler {
 
-	private ReportingManager reportingManager;
 	private Manager manager;
 	
 	public Scheduler(Manager m) {
 		manager = m;
-		reportingManager = new ReportingManager(m);
 	}
 }

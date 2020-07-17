@@ -16,6 +16,7 @@ public class Manager {
 	private static ProgramManager fileManager;
 	private static Scheduler scheduler;
 	private static CommandManager commandManager;
+	private static ReportingManager reportingManager;
 
 	/**
 	 * Main manager to hold, and start all the other managers.
@@ -32,6 +33,9 @@ public class Manager {
 		context.scan("managers.config");
 		context.refresh();
 		context.close();
+		
+		// Reporting manager
+		reportingManager = new ReportingManager(this);
 		
 		// File manager
 		System.out.println("Starting file manager...");
