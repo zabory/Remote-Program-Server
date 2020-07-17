@@ -11,22 +11,26 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import com.twilio.Twilio;
+
 import dataStructures.Report;
+
 /**
- * Class to handle emailing statuses, as well as send crash texts 
+ * Class to handle emailing statuses, as well as send crash texts
+ * 
  * @author Ben Shabowski
  *
  */
 public class ReportingManager {
-	
+
 	ArrayList<Report> reports;
 	Manager manager;
-	
+
 	public ReportingManager(Manager m) {
 		manager = m;
 		reports = new ArrayList<Report>();
 	}
-	
+
 	public ReportingManager() {
 		reports = new ArrayList<Report>();
 	}
@@ -34,70 +38,83 @@ public class ReportingManager {
 	public void addReport(Report r) {
 		reports.add(r);
 	}
-	
+
 	public void addReport(ArrayList<Report> r) {
 		reports.addAll(r);
 	}
-	
+
 	/**
-	 * Sends a report out to the email addresses in the config file. 
+	 * Sends a report out to the email addresses in the config file.
 	 */
 	public void sendReport() {
-		//gets the to addresses from config
+		// gets the to addresses from config
 		String[] to = manager.getServerConfigManager().getReportingEmails();
-		
+
 		final String from = "ZgameProgramReporter@gmail.com";
-		
+
 		String host = "smtp.gmail.com";
-		
+
 		Properties properties = System.getProperties();
-		
+
 		properties.put("mail.smtp.host", host);
 		properties.put("mail.smtp.port", "465");
-        properties.put("mail.smtp.ssl.enable", "true");
-        properties.put("mail.smtp.auth", "true");
-		
-        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-        	protected PasswordAuthentication getPasswordAuthentication() {
-        		return new PasswordAuthentication(from, "lsotsntlxlkfdvqr");
-        	}
-        });
-        
-        try {
-        	MimeMessage message = new MimeMessage(session);
-        	
-        	message.setFrom(new InternetAddress(from));
-        	
-        	for(String current : to) {
-        		message.addRecipient(Message.RecipientType.TO, new InternetAddress(current));
-        	}
-        	
-        	//TODO Put date into header
-            message.setSubject("Report for <plz put date here at some point>");
-            
-            //TODO Put date into body
-            String content = "<p><strong>This report is for &lt;date&gt; at a time</strong></p>"
-                    + "<table style=\"width: 507px; height:79px,\">"
-                    + "<tbody>"
-                    + "<tr>"
-                    + "<td style=\"width:232px;\">Program</td>"
-                    + "<td style=\"width:133px;\">Status</td>"
-                    + "<td style=\"width:184px;\">Runtime</td>"
-                    + "<td style=\"width:310px;\">Log</td>"
-                    + "</tr>";
-            //Add reports
-            for(Report r : reports) {
-            	content = content + r.toHTML();
-            }
-            
-            message.setContent(content, "text/html");
-            
-            System.out.println("sending...");
-            Transport.send(message);
-            System.out.println("Sent message successfully!");
-        } catch (MessagingException e) {
-        	e.printStackTrace();
-        }
+		properties.put("mail.smtp.ssl.enable", "true");
+		properties.put("mail.smtp.auth", "true");
+
+		Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(from, "lsotsntlxlkfdvqr");
+			}
+		});
+
+		try {
+			MimeMessage message = new MimeMessage(session);
+
+			message.setFrom(new InternetAddress(from));
+
+			for (String current : to) {
+				message.addRecipient(Message.RecipientType.TO, new InternetAddress(current));
+			}
+
+			// TODO Put date into header
+			message.setSubject("Report for <plz put date here at some point>");
+
+			// TODO Put date into body
+			String content = "<p><strong>This report is for &lt;date&gt; at a time</strong></p>"
+					+ "<table style=\"width: 507px; height:79px,\">" + "<tbody>" + "<tr>"
+					+ "<td style=\"width:232px;\">Program</td>" + "<td style=\"width:133px;\">Status</td>"
+					+ "<td style=\"width:184px;\">Runtime</td>" + "<td style=\"width:310px;\">Log</td>" + "</tr>";
+			// Add reports
+			for (Report r : reports) {
+				content = content + r.toHTML();
+			}
+
+			message.setContent(content, "text/html");
+
+			System.out.println("sending...");
+			Transport.send(message);
+			System.out.println("Sent message successfully!");
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
 	}
-	
+
+	/**
+	 * Sends text message to numbers based off the config
+	 * 
+	 * @param errorMessage Message to be sent to the number(s)
+	 */
+	public void sendErrorText(String errorMessage) {
+
+		String ACCOUNT_SID = "ACfadfc84818346547d5ce8034825cf69a";
+		String AUTH_TOKEN = "9f44c0548921ed4fc7c6916846fedbde";
+
+		Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+		for (String x : manager.getServerConfigManager().getReportingPhoneNumber()) {
+			com.twilio.rest.api.v2010.account.Message.creator(new com.twilio.type.PhoneNumber(x),
+					new com.twilio.type.PhoneNumber("18474433756"), errorMessage).create();
+		}
+
+	}
+
 }
