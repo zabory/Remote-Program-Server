@@ -1,6 +1,8 @@
 package managers;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -31,71 +33,86 @@ public class ReportingManager {
 		reports = new ArrayList<Report>();
 	}
 
-	public ReportingManager() {
-		reports = new ArrayList<Report>();
+	/**
+	 * Add report to be sent out
+	 * 
+	 * @param report Report to be sent out
+	 */
+	public void addReport(Report report) {
+		reports.add(report);
 	}
 
-	public void addReport(Report r) {
-		reports.add(r);
-	}
-
-	public void addReport(ArrayList<Report> r) {
-		reports.addAll(r);
+	/**
+	 * Add reports to be sent out
+	 * 
+	 * @param reports Reports to be sent out
+	 */
+	public void addReport(ArrayList<Report> reports) {
+		reports.addAll(reports);
 	}
 
 	/**
 	 * Sends a report out to the email addresses in the config file.
 	 */
 	public void sendReport() {
-		// gets the to addresses from config
-		String[] to = manager.getServerConfigManager().getReportingEmailAddresses();
+		if (manager.getServerConfigManager().getReportingEmailAddresses() == null) {
+			System.out.println("No reporting email addresses");
+		} else if (manager.getServerConfigManager().getGoogleEmailAddress() == null) {
+			System.out.println("No google email address");
+		} else if (manager.getServerConfigManager().getGoogleAPIKey() == null) {
+			System.out.println("No google email API key");
+		} else {
+			// gets the to addresses from config
+			String[] to = manager.getServerConfigManager().getReportingEmailAddresses();
 
-		final String from = manager.getServerConfigManager().getGoogleEmailAddress();
+			final String from = manager.getServerConfigManager().getGoogleEmailAddress();
 
-		String host = "smtp.gmail.com";
+			String host = "smtp.gmail.com";
 
-		Properties properties = System.getProperties();
+			Properties properties = System.getProperties();
 
-		properties.put("mail.smtp.host", host);
-		properties.put("mail.smtp.port", "465");
-		properties.put("mail.smtp.ssl.enable", "true");
-		properties.put("mail.smtp.auth", "true");
+			properties.put("mail.smtp.host", host);
+			properties.put("mail.smtp.port", "465");
+			properties.put("mail.smtp.ssl.enable", "true");
+			properties.put("mail.smtp.auth", "true");
 
-		Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(from, manager.getServerConfigManager().getGoogleAPIKey());
+			Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(from, manager.getServerConfigManager().getGoogleAPIKey());
+				}
+			});
+
+			try {
+				MimeMessage message = new MimeMessage(session);
+
+				message.setFrom(new InternetAddress(from));
+
+				for (String current : to) {
+					message.addRecipient(Message.RecipientType.TO, new InternetAddress(current));
+				}
+
+				Date date = new Date();
+				SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy HH:mm");
+
+				message.setSubject("Report for " + formatter.format(date));
+
+				String content = "<p><strong>This report is for " + formatter.format(date) + "</strong></p>"
+						+ "<table style=\"width: 507px; height:79px,\">" + "<tbody>" + "<tr>"
+						+ "<td style=\"width:232px;\">Program</td>" + "<td style=\"width:133px;\">Status</td>"
+						+ "<td style=\"width:184px;\">Runtime</td>" + "<td style=\"width:310px;\">Log</td>" + "</tr>";
+				// Add reports
+				for (Report r : reports) {
+					content = content + r.toHTML();
+				}
+
+				message.setContent(content, "text/html");
+
+				System.out.println("sending...");
+				Transport.send(message);
+				System.out.println("Sent message successfully!");
+			} catch (MessagingException e) {
+				e.printStackTrace();
 			}
-		});
-
-		try {
-			MimeMessage message = new MimeMessage(session);
-
-			message.setFrom(new InternetAddress(from));
-
-			for (String current : to) {
-				message.addRecipient(Message.RecipientType.TO, new InternetAddress(current));
-			}
-
-			// TODO Put date into header
-			message.setSubject("Report for <plz put date here at some point>");
-
-			// TODO Put date into body
-			String content = "<p><strong>This report is for &lt;date&gt; at a time</strong></p>"
-					+ "<table style=\"width: 507px; height:79px,\">" + "<tbody>" + "<tr>"
-					+ "<td style=\"width:232px;\">Program</td>" + "<td style=\"width:133px;\">Status</td>"
-					+ "<td style=\"width:184px;\">Runtime</td>" + "<td style=\"width:310px;\">Log</td>" + "</tr>";
-			// Add reports
-			for (Report r : reports) {
-				content = content + r.toHTML();
-			}
-
-			message.setContent(content, "text/html");
-
-			System.out.println("sending...");
-			Transport.send(message);
-			System.out.println("Sent message successfully!");
-		} catch (MessagingException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -105,11 +122,26 @@ public class ReportingManager {
 	 * @param errorMessage Message to be sent to the number(s)
 	 */
 	public void sendErrorText(String errorMessage) {
+		if (manager.getServerConfigManager().getTwilioAccountSID() == null) {
+			System.out.println("No twilio account SID");
+		} else if (manager.getServerConfigManager().getTwilioAuthToken() == null) {
+			System.out.println("No twilio account auth token");
+		} else if (manager.getServerConfigManager().getTwilioPhoneNumber() == null) {
+			System.out.println("No twilio account phone number");
+		} else if (manager.getServerConfigManager().getReportingPhoneNumber() == null) {
+			System.out.println("No reporting phone numbers");
+		} else {
+			Twilio.init(manager.getServerConfigManager().getTwilioAccountSID(),
+					manager.getServerConfigManager().getTwilioAuthToken());
 
-		Twilio.init(manager.getServerConfigManager().getTwilioAccountSID(), manager.getServerConfigManager().getTwilioAuthToken());
-		
-		for (String x : manager.getServerConfigManager().getReportingPhoneNumber()) {
-			com.twilio.rest.api.v2010.account.Message.creator(new com.twilio.type.PhoneNumber(x), new com.twilio.type.PhoneNumber(manager.getServerConfigManager().getTwilioPhoneNumber()), errorMessage).create();
+			for (String x : manager.getServerConfigManager().getReportingPhoneNumber()) {
+				com.twilio.rest.api.v2010.account.Message
+						.creator(new com.twilio.type.PhoneNumber(x),
+								new com.twilio.type.PhoneNumber(
+										manager.getServerConfigManager().getTwilioPhoneNumber()),
+								errorMessage)
+						.create();
+			}
 		}
 
 	}

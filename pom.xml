@@ -8,8 +8,8 @@
 	<name>Remote Program Server</name>
 	<dependencies>
 		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>javax.mail-api</artifactId>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
 			<version>1.6.2</version>
 		</dependency>
 		<dependency>
@@ -22,13 +22,13 @@
 			<artifactId>spring-context</artifactId>
 			<version>5.2.0.RELEASE</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.twilio.sdk</groupId>
 			<artifactId>twilio</artifactId>
 			<version>7.54.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>

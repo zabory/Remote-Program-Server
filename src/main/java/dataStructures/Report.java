@@ -40,7 +40,7 @@ public class Report {
 			statusColor = "#008000"; //green
 			break;
 		case Failed:
-			statusColor = "#008000"; //red
+			statusColor = "#cf1b1b"; //red
 			break;
 		default:
 			statusColor = "#000000"; //black

@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import app.RemoteProgramServerUI;
+import dataStructures.Report;
+import dataStructures.State;
 import javafx.application.Application;
 import managers.config.ServerConfigManager;
 
@@ -43,7 +45,7 @@ public class Manager {
 		
 		// Reporting manager
 		System.out.println("Starting reporting manager...");
-		reportingManager = new ReportingManager(this);		
+		reportingManager = new ReportingManager(this);
 		
 		// File manager
 		System.out.println("Starting file manager...");
