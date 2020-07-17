@@ -1,6 +1,5 @@
 package app;
 
-
 import managers.Manager;
 
 /**
@@ -12,6 +11,7 @@ public class Head {
 
 	public static void main(String[] args) {
 		new Manager(args);
+		
 	}
 
 }

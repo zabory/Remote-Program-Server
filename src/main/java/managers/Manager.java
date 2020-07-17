@@ -9,6 +9,7 @@ import app.RemoteProgramServerUI;
 import javafx.application.Application;
 import managers.config.ServerConfigManager;
 
+@SuppressWarnings("restriction")
 public class Manager {
 
 	private static RemoteProgramServerUI remoteProgramServerUI;
@@ -27,13 +28,18 @@ public class Manager {
 		//Converting array of args into a list for ez pickings
 		List<String> arguments = Arrays.asList(args);
 		
-		// Config manager
-		System.out.println("Starting config manager...");
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-		context.scan("managers.config");
-		context.refresh();
-		serverConfigManager = context.getBean(ServerConfigManager.class);
-		context.close();
+		try {
+			// Config manager
+			System.out.println("Starting config manager...");
+			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+			context.scan("managers.config");
+			context.refresh();
+			serverConfigManager = context.getBean(ServerConfigManager.class);
+			context.close();
+		} catch (org.springframework.beans.factory.BeanDefinitionStoreException e) {
+			System.out.println("Unable to load file");
+			System.exit(1);
+		}
 		
 		// Reporting manager
 		System.out.println("Starting reporting manager...");

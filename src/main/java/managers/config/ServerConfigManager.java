@@ -5,7 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource("classpath:server.properties.local")
+@PropertySource("classpath:server.properties")
+@PropertySource("classpath:server-local.properties")
 public class ServerConfigManager {
 
 	@Value("${server.name:Program Server")
