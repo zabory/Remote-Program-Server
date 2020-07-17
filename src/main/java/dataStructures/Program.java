@@ -164,7 +164,7 @@ public class Program {
 			//get a buffered reader goin
 			BufferedReader BR = new BufferedReader(new InputStreamReader(currentProcess.getInputStream()));
 			
-			//Dont you dare set it to running it were wainting for a message
+			//Dont you dare set it to running it were waiting for a message
 			if(runningSwitch == null) {
 				status = dataStructures.State.Running;
 			}else {
