@@ -1,8 +1,9 @@
 # Compiled class file
 *.class
 
-# Why would I update these files, in the BIN
+# Why would I update these files
 bin/*
+.settings/*
 
 # Log file
 *.log
