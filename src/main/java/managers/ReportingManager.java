@@ -48,9 +48,9 @@ public class ReportingManager {
 	 */
 	public void sendReport() {
 		// gets the to addresses from config
-		String[] to = manager.getServerConfigManager().getReportingEmails();
+		String[] to = manager.getServerConfigManager().getReportingEmailAddresses();
 
-		final String from = "ZgameProgramReporter@gmail.com";
+		final String from = manager.getServerConfigManager().getGoogleEmailAddress();
 
 		String host = "smtp.gmail.com";
 
@@ -63,7 +63,7 @@ public class ReportingManager {
 
 		Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(from, "lsotsntlxlkfdvqr");
+				return new PasswordAuthentication(from, manager.getServerConfigManager().getGoogleAPIKey());
 			}
 		});
 
@@ -106,13 +106,10 @@ public class ReportingManager {
 	 */
 	public void sendErrorText(String errorMessage) {
 
-		String ACCOUNT_SID = "ACfadfc84818346547d5ce8034825cf69a";
-		String AUTH_TOKEN = "9f44c0548921ed4fc7c6916846fedbde";
-
-		Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+		Twilio.init(manager.getServerConfigManager().getTwilioAccountSID(), manager.getServerConfigManager().getTwilioAuthToken());
+		
 		for (String x : manager.getServerConfigManager().getReportingPhoneNumber()) {
-			com.twilio.rest.api.v2010.account.Message.creator(new com.twilio.type.PhoneNumber(x),
-					new com.twilio.type.PhoneNumber("18474433756"), errorMessage).create();
+			com.twilio.rest.api.v2010.account.Message.creator(new com.twilio.type.PhoneNumber(x), new com.twilio.type.PhoneNumber(manager.getServerConfigManager().getTwilioPhoneNumber()), errorMessage).create();
 		}
 
 	}

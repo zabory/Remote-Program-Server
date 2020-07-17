@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-//@PropertySource("file:${N:\\server.properties}")
 @Configuration
-@PropertySource("classpath:server.properties")
+@PropertySource("classpath:server.properties.local")
 public class ServerConfigManager {
 
 	@Value("${server.name:Program Server")
@@ -21,6 +20,21 @@ public class ServerConfigManager {
 	@Value("${port:60533}")
 	private int port;
 
+	@Value("${twilio.account.sid}")
+	private String twilioAccountSID;
+	
+	@Value("${twilio.auth.token}")
+	private String twilioAuthToken;
+	
+	@Value("${twilio.phone.number}")
+	private String twilioPhoneNumber;
+	
+	@Value("${google.email.address}")
+	private String googleEmailAddress;
+	
+	@Value("${google.api.key}")
+	private String googleAPIKey;
+
 	public String getName() {
 		return name;
 	}
@@ -33,8 +47,30 @@ public class ServerConfigManager {
 		return reportingPhoneNumber;
 	}
 	
-	public String[] getReportingEmails() {
+	public String[] getReportingEmailAddresses() {
 		return reportingEmailAddresses;
 	}
+
+	public String getTwilioAccountSID() {
+		return twilioAccountSID;
+	}
+
+	public String getTwilioAuthToken() {
+		return twilioAuthToken;
+	}
+	
+	public String getTwilioPhoneNumber() {
+		return twilioPhoneNumber;
+	}
+
+	public String getGoogleEmailAddress() {
+		return googleEmailAddress;
+	}
+
+	public String getGoogleAPIKey() {
+		return googleAPIKey;
+	}
+	
+	
 
 }

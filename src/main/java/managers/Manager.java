@@ -32,10 +32,12 @@ public class Manager {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.scan("managers.config");
 		context.refresh();
+		serverConfigManager = context.getBean(ServerConfigManager.class);
 		context.close();
 		
 		// Reporting manager
-		reportingManager = new ReportingManager(this);
+		System.out.println("Starting reporting manager...");
+		reportingManager = new ReportingManager(this);		
 		
 		// File manager
 		System.out.println("Starting file manager...");
