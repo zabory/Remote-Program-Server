@@ -10,7 +10,6 @@ public enum State{
 	 * Starting up, will be in this state until the processes' custom initialized message is hit 
 	 */
 	Starting,
-	
 	/**
 	 * Process is currently running.
 	 * Unless specified otherwise, a process is set to running as soon as it starts

@@ -20,3 +20,4 @@ hs_err_pid*
 #local properties file
 server-local.properties
 target/classes/server.properties
+/target/
