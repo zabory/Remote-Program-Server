@@ -130,8 +130,18 @@ public class Program {
 		this.startCommand = startCommand;
 	}
 	
-	public String getRuntime() {		
-		long differenceInMilliseconds = Math.abs(endDate.getTime() - startDate.getTime());
+	/**
+	 * 
+	 * @return How long the process has been running, from start to end, or start to current date
+	 */
+	public String getRuntime() {
+		long differenceInMilliseconds;
+		
+		if(endDate != null) {
+			differenceInMilliseconds = Math.abs(endDate.getTime() - startDate.getTime());
+		}else {
+			differenceInMilliseconds = Math.abs(new Date().getTime() - startDate.getTime());
+		}
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
 		

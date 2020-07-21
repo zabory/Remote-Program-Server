@@ -15,7 +15,7 @@ public class Manager {
 	private static RemoteProgramServerUI remoteProgramServerUI;
 	private static ServerConfigManager serverConfigManager;
 	private static ProgramManager fileManager;
-	private static Scheduler scheduler;
+	private static ScheduleManager schedulManager;
 	private static CommandManager commandManager;
 	private static ReportingManager reportingManager;
 
@@ -51,7 +51,7 @@ public class Manager {
 
 		// Program scheduler
 		System.out.println("Starting scheduler...");
-		scheduler = new Scheduler(this);
+		schedulManager = new ScheduleManager(this);
 		
 		// Command manager
 		System.out.println("Starting command manager...");
@@ -81,8 +81,8 @@ public class Manager {
 		return fileManager;
 	}
 
-	public Scheduler getScheduler() {
-		return scheduler;
+	public ScheduleManager getSchedulManager() {
+		return schedulManager;
 	}
 	
 	public CommandManager getCommandManager() {

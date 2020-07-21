@@ -15,6 +15,9 @@ public class ServerConfigManager {
 	@Value("${reporting.emails}")
 	private String[] reportingEmailAddresses;
 	
+	@Value("${daily.reporting.time:0700}")
+	private String dailyReportingTime;
+	
 	@Value("${reporting.numbers}")
 	private String[] reportingPhoneNumber;
 	
@@ -70,6 +73,10 @@ public class ServerConfigManager {
 
 	public String getGoogleAPIKey() {
 		return googleAPIKey;
+	}
+
+	public String getDailyReportingTime() {
+		return dailyReportingTime;
 	}
 	
 	
