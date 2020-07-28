@@ -5,14 +5,10 @@ import java.util.List;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import app.RemoteProgramServerUI;
-import javafx.application.Application;
 import managers.config.ServerConfigManager;
 
-@SuppressWarnings("restriction")
 public class Manager {
 
-	private static RemoteProgramServerUI remoteProgramServerUI;
 	private static ServerConfigManager serverConfigManager;
 	private static ProgramManager fileManager;
 	private static ScheduleManager schedulManager;
@@ -57,20 +53,6 @@ public class Manager {
 		System.out.println("Starting command manager...");
 		commandManager = new CommandManager(this);
 		
-		if (!arguments.contains("-nogui")) {
-			// Server UI
-			System.out.println("Starting UI...");
-			remoteProgramServerUI = new RemoteProgramServerUI();
-			remoteProgramServerUI.setHead(this);
-
-			// launch the UI
-			System.out.println("Opening UI...");
-			Application.launch(remoteProgramServerUI.getClass());
-		}
-	}
-
-	public RemoteProgramServerUI getRemoteProgramServerUI() {
-		return remoteProgramServerUI;
 	}
 
 	public ServerConfigManager getServerConfigManager() {

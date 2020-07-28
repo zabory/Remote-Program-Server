@@ -32,14 +32,17 @@ public class ScheduleManager extends Thread{
 			Calendar currentTime = Calendar.getInstance();
 			//Reporting manager kick off
 			if(currentTime.get(Calendar.MINUTE) == reportingTime.get(Calendar.MINUTE) &&
-					currentTime.get(Calendar.HOUR) == reportingTime.get(Calendar.HOUR)) {
+					currentTime.get(Calendar.HOUR) == reportingTime.get(Calendar.HOUR) && 
+					currentTime.get(Calendar.SECOND) == reportingTime.get(Calendar.SECOND)) {
+				
 				manager.getReportingManager().sendReport();
 			}
 			
+			//Kick off any programs meant to be running
 			
 			
 			try {
-				Thread.sleep(500);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
